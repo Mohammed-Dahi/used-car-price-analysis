@@ -1,12 +1,15 @@
-# 🚗 Used Car Price Analysis
+# 🚗 Used Car Price Analysis & Prediction
 
 ## 📌 Project Overview
 
-This project performs an Exploratory Data Analysis (EDA) on a used car dataset to understand the main factors associated with used car selling prices.
+This project analyzes a used car dataset to understand the factors associated with used car selling prices and to build machine learning models for price prediction.
 
-The analysis covers data inspection, data cleaning, feature engineering, univariate analysis, bivariate analysis, multivariate analysis, and final insights.
+The project was developed in two stages:
 
-An interactive Streamlit dashboard was also developed to make the analysis easier to explore.
+- **Version 1:** Exploratory Data Analysis (EDA) and Interactive Dashboard
+- **Version 2:** Regression-based Machine Learning for Car Price Prediction
+
+The complete workflow covers data understanding, data cleaning, feature engineering, exploratory analysis, preprocessing, multicollinearity analysis, regression modeling, model evaluation, and interactive visualization.
 
 ---
 
@@ -18,10 +21,12 @@ An interactive Streamlit dashboard was also developed to make the analysis easie
 - Remove duplicate records.
 - Standardize inconsistent categorical values.
 - Perform feature engineering.
-- Analyze vehicle price distributions.
-- Explore relationships between vehicle characteristics and selling price.
-- Identify important pricing patterns.
-- Build an interactive dashboard for data exploration.
+- Explore factors associated with used car prices.
+- Analyze relationships between vehicle characteristics and selling price.
+- Build and compare regression models.
+- Evaluate model performance using multiple metrics.
+- Prevent Data Leakage during preprocessing and modeling.
+- Develop an interactive dashboard for data exploration.
 
 ---
 
@@ -78,6 +83,8 @@ This feature represents the approximate age of each vehicle.
 
 This feature provides an additional perspective on vehicle pricing relative to mileage.
 
+The `price_per_km` feature was used for exploratory analysis but was excluded from machine learning because it is calculated using the target variable `selling_price`.
+
 ---
 
 ## 📈 Exploratory Data Analysis
@@ -131,43 +138,114 @@ Only brands with a sufficient number of observations were considered for reliabl
 
 ---
 
-## 🔎 Key Insights
+## 🤖 Machine Learning - Car Price Prediction
 
-### 1. Vehicle Age
+Version 2 extends the original EDA project into a supervised machine learning regression problem.
 
-Newer vehicles generally have higher selling prices, while older vehicles tend to have lower resale values.
+The target variable is:
 
-### 2. Mileage
+`selling_price`
 
-Higher mileage generally corresponds to lower selling prices, although the relationship is not perfectly linear.
+The goal is to predict used car selling prices based on vehicle characteristics.
 
-### 3. Price Distribution
+### Regression Models
 
-Selling prices are right-skewed, with most vehicles concentrated in the lower-to-middle price range and a smaller number of premium vehicles forming a long upper tail.
+The following models were trained and compared:
 
-### 4. Fuel Type
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- Decision Tree Regressor
+- Random Forest Regressor
+- Gradient Boosting Regressor
 
-Petrol and diesel vehicles represent the majority of the dataset.
+---
 
-### 5. Transmission
+## 🔬 Multicollinearity Analysis
 
-Manual vehicles dominate the dataset, while automatic vehicles represent a smaller proportion.
+Multicollinearity was investigated using:
 
-### 6. Ownership
+- Correlation Matrix
+- Variance Inflation Factor (VIF)
 
-First-owner vehicles are the most common and generally tend to have stronger resale values than vehicles with multiple previous owners.
+A strong relationship exists between `year` and `car_age` because:
 
-### 7. Seller Type
+`car_age = 2026 - year`
 
-Individual sellers represent a large portion of the dataset, followed by dealers and other seller categories.
+Therefore, `year` was excluded from the final machine learning features and `car_age` was retained.
 
-### 8. Brand
+Regularization techniques such as Ridge and Lasso were also considered as possible approaches for handling multicollinearity.
 
-Average selling prices vary significantly across vehicle brands, indicating that brand is an important factor in used-car pricing.
+---
 
-### 9. Data Quality
+## 📏 Feature Scaling
 
-The original dataset contained missing values, duplicates, inconsistent categorical labels, and numerical anomalies. These issues were addressed during the data cleaning and preprocessing stages.
+Standardization was applied to the numerical features used by:
+
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+
+Tree-based models were trained without feature scaling because their splitting process is generally not affected by the scale of numerical variables.
+
+---
+
+## 🛡️ Data Leakage Prevention
+
+Data Leakage was carefully avoided during the machine learning workflow.
+
+The dataset was first divided into training and testing sets.
+
+Preprocessing was then performed using `Pipeline` and `ColumnTransformer`, ensuring that preprocessing parameters were learned from the training data only.
+
+The `price_per_km` feature was excluded from model training because it is calculated using the target variable `selling_price`.
+
+---
+
+## 📊 Model Evaluation
+
+The regression models were evaluated using:
+
+### MAE
+
+Mean Absolute Error measures the average absolute difference between actual and predicted prices.
+
+Lower values indicate better performance.
+
+### RMSE
+
+Root Mean Squared Error gives greater weight to larger prediction errors.
+
+Lower values indicate better performance.
+
+### R-squared
+
+R-squared measures the proportion of variation in selling prices explained by the model.
+
+Higher values indicate better performance.
+
+---
+
+## 🔎 Regularization
+
+Linear Regression was compared with:
+
+- Ridge Regression
+- Lasso Regression
+
+Ridge uses L2 regularization, while Lasso uses L1 regularization.
+
+The models were compared using RMSE and R-squared to determine whether regularization improved predictive performance.
+
+---
+
+## 📋 Model Comparison
+
+All regression models were evaluated using the same train/test split and the same evaluation metrics.
+
+The final model was selected based on its overall performance, with particular attention to RMSE, MAE, and R-squared.
+
+The model comparison and final results are available in the machine learning notebook.
 
 ---
 
@@ -205,6 +283,8 @@ The dashboard includes:
 - Matplotlib
 - Seaborn
 - Plotly
+- Scikit-learn
+- Statsmodels
 - Streamlit
 - Jupyter Notebook
 
@@ -223,6 +303,7 @@ used-car-price-analysis/
 │
 ├── 📂 notebooks/
 │   └── 📓 Used_Car_EDA.ipynb
+|   └── 📓 Model.ipynb
 │
 ├── 📂 dashboard/
 │   └── 🐍 app.py
@@ -250,11 +331,13 @@ Additional engineered features were created during the analysis.
 
 Possible future improvements include:
 
-- Building a machine learning model to predict used car prices.
-- Adding advanced interactive visualizations.
-- Deploying the Streamlit dashboard online.
-- Adding interactive brand and model comparisons.
-- Applying statistical modeling to identify the strongest price drivers.
+- Hyperparameter tuning.
+- Cross-validation.
+- Advanced feature engineering.
+- Building a more advanced price prediction system.
+- Deploying the machine learning model.
+- Connecting the prediction model directly to the Streamlit dashboard.
+- Adding interactive price prediction to the dashboard.
 
 ---
 
