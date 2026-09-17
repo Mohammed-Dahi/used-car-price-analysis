@@ -389,7 +389,3 @@ used-car-price-analysis/
 
 **Mohammed Dahi**
 *Data Analysis & Data Science Project*
-
-```
-
-```
