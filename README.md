@@ -1,15 +1,10 @@
-# 🚗 Used Car Price Analysis & Prediction
+# 🚗 Used Car Price Analysis & Machine Learning
 
 ## 📌 Project Overview
 
-This project analyzes a used car dataset to understand the factors associated with used car selling prices and to build machine learning models for price prediction.
+This project is an end-to-end Data Science project focused on analyzing used car data, understanding the factors associated with vehicle prices, building machine learning models for price prediction and price classification, and developing an interactive dashboard for data exploration.
 
-The project was developed in two stages:
-
-- **Version 1:** Exploratory Data Analysis (EDA) and Interactive Dashboard
-- **Version 2:** Regression-based Machine Learning for Car Price Prediction
-
-The complete workflow covers data understanding, data cleaning, feature engineering, exploratory analysis, preprocessing, multicollinearity analysis, regression modeling, model evaluation, and interactive visualization.
+The complete workflow covers data understanding, data cleaning, feature engineering, exploratory data analysis, statistical analysis, preprocessing, multicollinearity analysis, regression modeling, classification modeling, model evaluation, data leakage prevention, and interactive visualization.
 
 ---
 
@@ -20,12 +15,15 @@ The complete workflow covers data understanding, data cleaning, feature engineer
 - Detect and correct invalid data.
 - Remove duplicate records.
 - Standardize inconsistent categorical values.
-- Perform feature engineering.
+- Perform meaningful feature engineering.
 - Explore factors associated with used car prices.
 - Analyze relationships between vehicle characteristics and selling price.
-- Build and compare regression models.
-- Evaluate model performance using multiple metrics.
-- Prevent Data Leakage during preprocessing and modeling.
+- Build and compare regression models for car price prediction.
+- Build a Logistic Regression model for price classification.
+- Evaluate machine learning models using appropriate performance metrics.
+- Analyze multicollinearity between numerical features.
+- Apply appropriate feature scaling techniques.
+- Prevent data leakage throughout the machine learning workflow.
 - Develop an interactive dashboard for data exploration.
 
 ---
@@ -45,11 +43,15 @@ The dataset contains information about used vehicles and their selling prices.
 | `transmission` | Transmission type |
 | `owner` | Ownership history |
 
+The original dataset contained **4,345 records and 8 columns**.
+
+After data cleaning, the final dataset contains **3,926 records**, with **0 missing values** and **0 duplicate rows**.
+
 ---
 
 ## 🧹 Data Cleaning
 
-The original dataset contained several data quality issues, including:
+The dataset contained several data quality issues, including:
 
 - Missing values
 - Duplicate records
@@ -57,107 +59,116 @@ The original dataset contained several data quality issues, including:
 - Inconsistent categorical labels
 - Extreme mileage values
 
-Missing values were handled using appropriate techniques based on the variable type.
+- **Missing Values:** Handled using appropriate techniques based on the variable type.
+- **Duplicates:** Removed to improve data consistency.
+- **Categorical Consistency:** Standardized to ensure consistent categories across the dataset.
+- **Invalid Mileage:** Clearly invalid mileage values above **1,000,000 km** were treated as data-entry errors and replaced with missing values before median imputation.
 
-Duplicate records were removed to improve data consistency.
-
-Clearly invalid mileage values above 1,000,000 km were treated as data-entry errors and replaced with missing values before median imputation.
-
-Inconsistent categorical values were standardized to improve the quality and reliability of the analysis.
+The cleaned dataset was validated to ensure data quality before proceeding to analysis and machine learning.
 
 ---
 
 ## ⚙️ Feature Engineering
 
-Two additional features were created during the analysis.
+Additional features were created to provide more meaningful information about each vehicle.
 
 ### Car Age
+```text
+car_age = 2026 - year
 
-`car_age = 2026 - year`
+```
 
-This feature represents the approximate age of each vehicle.
+*This feature represents the approximate age of the vehicle.*
 
 ### Price per Kilometer
 
-`price_per_km = selling_price / km_driven`
+```text
+price_per_km = selling_price / km_driven
 
-This feature provides an additional perspective on vehicle pricing relative to mileage.
+```
 
-The `price_per_km` feature was used for exploratory analysis but was excluded from machine learning because it is calculated using the target variable `selling_price`.
+*This feature provides an additional perspective on vehicle pricing relative to mileage.*
+
+> **Note:** The `price_per_km` feature was used during exploratory analysis but was excluded from machine learning because it is calculated using the target variable (`selling_price`), which would introduce data leakage.
+
+A `brand` feature was also extracted from the vehicle name to support brand-level analysis and machine learning.
 
 ---
 
 ## 📈 Exploratory Data Analysis
 
+A comprehensive Exploratory Data Analysis was performed to understand the dataset and identify important patterns.
+
 ### Univariate Analysis
 
-The following variables were analyzed individually:
+The analysis included:
 
-- Selling price
-- Mileage
-- Car age
-- Fuel type
-- Transmission
-- Seller type
-- Ownership
+* Selling price distribution
+* Mileage distribution
+* Car age distribution
+* Fuel type
+* Transmission
+* Seller type
+* Ownership
 
 ### Bivariate Analysis
 
-The following relationships were explored:
+Relationships investigated included:
 
-- Selling price vs. car age
-- Selling price vs. mileage
-- Selling price vs. fuel type
-- Selling price vs. transmission
-- Selling price vs. ownership
-- Selling price vs. seller type
+* Selling price vs. car age
+* Selling price vs. mileage
+* Selling price vs. fuel type
+* Selling price vs. transmission
+* Selling price vs. ownership
+* Selling price vs. seller type
 
 ### Multivariate Analysis
 
-Multiple variables were analyzed together to identify more complex pricing patterns.
+Multiple variables were analyzed simultaneously to identify more complex pricing patterns, including:
 
-Examples include:
-
-- Selling price vs. car age by fuel type
-- Selling price vs. mileage by transmission
-- Average selling price across fuel and transmission combinations
+* Selling price vs. car age by fuel type
+* Selling price vs. mileage by transmission
+* Average selling price across fuel and transmission combinations
+* Correlation analysis between numerical variables
 
 ---
 
 ## 🏷️ Brand Analysis
 
-Vehicle brands were extracted from the vehicle name.
+Vehicle brands were extracted from the vehicle name to enable brand-level analysis. Brands were analyzed based on:
 
-Brands were compared based on:
+* Number of vehicles
+* Average selling price
+* Median selling price
 
-- Number of vehicles
-- Average selling price
-- Median selling price
-
-Only brands with a sufficient number of observations were considered for reliable comparison.
+*Only brands with a sufficient number of observations were considered for reliable comparison.*
 
 ---
 
-## 🤖 Machine Learning - Car Price Prediction
+## 🤖 Machine Learning
 
-Version 2 extends the original EDA project into a supervised machine learning regression problem.
+The project applies supervised machine learning from two complementary perspectives: numerical price prediction and binary price classification.
 
-The target variable is:
+### Car Price Prediction
 
-`selling_price`
+The regression task predicts the numerical `selling_price` of a used car based on its characteristics. The following regression models were trained and compared:
 
-The goal is to predict used car selling prices based on vehicle characteristics.
+* Linear Regression
+* Ridge Regression
+* Lasso Regression
+* Decision Tree Regressor
+* Random Forest Regressor
+* Gradient Boosting Regressor
 
-### Regression Models
+#### Regression Evaluation
 
-The following models were trained and compared:
+The regression models were evaluated using:
 
-- Linear Regression
-- Ridge Regression
-- Lasso Regression
-- Decision Tree Regressor
-- Random Forest Regressor
-- Gradient Boosting Regressor
+* **MAE** — Mean Absolute Error
+* **RMSE** — Root Mean Squared Error
+* **$R^2$** — R-squared
+
+*Lower MAE and RMSE indicate smaller prediction errors, while higher $R^2$ indicates better explanatory performance.*
 
 ---
 
@@ -165,184 +176,220 @@ The following models were trained and compared:
 
 Multicollinearity was investigated using:
 
-- Correlation Matrix
-- Variance Inflation Factor (VIF)
+* Correlation Matrix
+* Variance Inflation Factor (VIF)
 
-A strong relationship exists between `year` and `car_age` because:
+A direct relationship exists between `year` and `car_age`:
 
-`car_age = 2026 - year`
+```text
+car_age = 2026 - year
 
-Therefore, `year` was excluded from the final machine learning features and `car_age` was retained.
+```
 
-Regularization techniques such as Ridge and Lasso were also considered as possible approaches for handling multicollinearity.
+Therefore, `year` was excluded from the final machine learning feature set while `car_age` was retained. Regularization techniques such as Ridge and Lasso were also used to reduce the impact of multicollinearity.
 
 ---
 
 ## 📏 Feature Scaling
 
-Standardization was applied to the numerical features used by:
+Standardization was applied to numerical features for models that benefit from scaled inputs, including:
 
-- Linear Regression
-- Ridge Regression
-- Lasso Regression
+* Linear Regression
+* Ridge Regression
+* Lasso Regression
+* Logistic Regression
 
-Tree-based models were trained without feature scaling because their splitting process is generally not affected by the scale of numerical variables.
+*Tree-based models were trained without feature scaling because their splitting process is generally not affected by feature magnitude.*
 
 ---
 
 ## 🛡️ Data Leakage Prevention
 
-Data Leakage was carefully avoided during the machine learning workflow.
+Data leakage was carefully prevented throughout the machine learning workflow:
 
-The dataset was first divided into training and testing sets.
+* The dataset was first divided into training and testing sets before preprocessing.
+* `Pipeline` and `ColumnTransformer` were used to ensure that preprocessing parameters were learned only from the training data.
+* The following features were excluded when necessary:
+* `selling_price` — target variable
+* `price_per_km` — directly derived from the target
+* `year` — redundant with `car_age`
+* `name` — high-cardinality feature
 
-Preprocessing was then performed using `Pipeline` and `ColumnTransformer`, ensuring that preprocessing parameters were learned from the training data only.
 
-The `price_per_km` feature was excluded from model training because it is calculated using the target variable `selling_price`.
-
----
-
-## 📊 Model Evaluation
-
-The regression models were evaluated using:
-
-### MAE
-
-Mean Absolute Error measures the average absolute difference between actual and predicted prices.
-
-Lower values indicate better performance.
-
-### RMSE
-
-Root Mean Squared Error gives greater weight to larger prediction errors.
-
-Lower values indicate better performance.
-
-### R-squared
-
-R-squared measures the proportion of variation in selling prices explained by the model.
-
-Higher values indicate better performance.
+* The extracted `brand` feature was retained as a more general categorical representation of the vehicle.
 
 ---
 
-## 🔎 Regularization
+## 🧠 Price Classification
 
-Linear Regression was compared with:
+A binary classification task was developed to classify vehicles into two price categories: **Lower Price** and **Higher Price**.
 
-- Ridge Regression
-- Lasso Regression
+The median selling price was used as the classification threshold:
 
-Ridge uses L2 regularization, while Lasso uses L1 regularization.
+```text
+Median Selling Price = 350,000
 
-The models were compared using RMSE and R-squared to determine whether regularization improved predictive performance.
+```
+
+The target variable was defined as:
+
+* **0** $\rightarrow$ Lower Price
+* **1** $\rightarrow$ Higher Price
+
+### Class Distribution
+
+| Class | Records | Percentage |
+| --- | --- | --- |
+| Lower Price | 2,143 | 54.58% |
+| Higher Price | 1,783 | 45.42% |
 
 ---
 
-## 📋 Model Comparison
+## 🤖 Logistic Regression
 
-All regression models were evaluated using the same train/test split and the same evaluation metrics.
+Logistic Regression was implemented to classify vehicles into lower-price and higher-price categories. The classification workflow included:
 
-The final model was selected based on its overall performance, with particular attention to RMSE, MAE, and R-squared.
+1. Feature selection
+2. Train/Test Split
+3. Missing-value handling
+4. Numerical feature scaling
+5. Categorical feature encoding
+6. Pipeline-based preprocessing
+7. Logistic Regression training & prediction
+8. Probability estimation
 
-The model comparison and final results are available in the machine learning notebook.
+---
+
+## 📊 Classification Model Evaluation
+
+The Logistic Regression model was evaluated using:
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* Confusion Matrix
+* ROC-AUC & ROC Curve
+
+### Final Logistic Regression Results
+
+| Metric | Result |
+| --- | --- |
+| **Accuracy** | **78.12%** |
+| **ROC-AUC** | **86.45%** |
+
+### Classification Report
+
+| Class | Precision | Recall | F1-Score |
+| --- | --- | --- | --- |
+| **Lower Price** | 0.80 | 0.79 | 0.80 |
+| **Higher Price** | 0.76 | 0.76 | 0.76 |
+
+> The Logistic Regression model achieved an accuracy of **78.12%** on the unseen test dataset, with a ROC-AUC of **86.45%**.
 
 ---
 
 ## 📊 Interactive Dashboard
 
-An interactive Streamlit dashboard was developed to provide a user-friendly way to explore the dataset.
+An interactive Streamlit dashboard was developed to provide a user-friendly interface for exploring the used car dataset.
 
-The dashboard includes:
+### Dashboard Features
 
-- Key Performance Indicators
-- Selling price distribution
-- Selling price vs. car age
-- Selling price vs. mileage
-- Average price by fuel type
-- Price distribution by transmission
-- Average price by ownership
-- Average price by seller type
-- Brand-level price analysis
-- Interactive filtering
+* Key Performance Indicators (KPIs)
+* Selling price distribution
+* Selling price vs. car age & mileage
+* Average price by fuel type & transmission
+* Average price by ownership & seller type
+* Brand-level price analysis
+* Interactive filtering
 
 ### Available Filters
 
-- Fuel Type
-- Transmission
-- Seller Type
-- Owner Type
+* Fuel Type
+* Transmission
+* Seller Type
+* Owner Type
+
+---
+
+## 💡 Key Insights
+
+* Vehicle age is an important factor associated with selling price.
+* Higher mileage is generally associated with lower selling prices.
+* Selling prices show a right-skewed distribution with a premium-price tail.
+* Petrol and Diesel vehicles represent the dominant fuel categories.
+* Manual transmission represents the majority of vehicles.
+* Ownership history is associated with differences in selling prices.
+* Vehicle brands show differences in average and median selling prices.
+* Data quality issues required careful cleaning and preprocessing.
+* Vehicle characteristics can be used to classify cars into lower-price and higher-price categories.
+* Logistic Regression achieved **78.12% accuracy** and **86.45% ROC-AUC** on the test dataset.
 
 ---
 
 ## 🛠️ Technologies Used
 
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Plotly
-- Scikit-learn
-- Statsmodels
-- Streamlit
-- Jupyter Notebook
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Plotly
+* Scikit-learn
+* Statsmodels
+* Streamlit
+* Jupyter Notebook
 
 ---
+
 ## 📁 Project Structure
 
 ```text
 used-car-price-analysis/
 │
-├── 📂 data/
-│   ├── 📂 raw/
-│   │   └── 📄 car_data.csv
+├── data/
+│   ├── raw/
+│   │   └── car_data.csv
 │   │
-│   └── 📂 processed/
-│       └── 📄 cleaned_car_data.csv
+│   └── processed/
+│       └── cleaned_car_data.csv
 │
-├── 📂 notebooks/
-│   └── 📓 Used_Car_EDA.ipynb
-|   └── 📓 Model.ipynb
+├── notebooks/
+│   ├── Used_Car_EDA.ipynb
+│   └── Regression_Model.ipynb
+│   └── Classifiction_Model.ipynb
 │
-├── 📂 dashboard/
-│   └── 🐍 app.py
+├── dashboard/
+│   └── app.py
 │
-├── 📄 README.md
-├── 📄 requirements.txt
-└── 📄 .gitignore
+├── README.md
+├── requirements.txt
+└── .gitignore
+
 ```
----
-
-## 📌 Final Dataset
-
-After data cleaning and preprocessing, the final dataset contains:
-
-- **3,926 records**
-- **8 original columns**
-- **0 missing values**
-- **0 duplicate rows**
-
-Additional engineered features were created during the analysis.
 
 ---
 
 ## 🚀 Future Improvements
 
-Possible future improvements include:
-
-- Hyperparameter tuning.
-- Cross-validation.
-- Advanced feature engineering.
-- Building a more advanced price prediction system.
-- Deploying the machine learning model.
-- Connecting the prediction model directly to the Streamlit dashboard.
-- Adding interactive price prediction to the dashboard.
+* Hyperparameter tuning
+* Cross-validation
+* Testing additional classification algorithms
+* Advanced feature engineering
+* Feature selection techniques
+* Comparing Logistic Regression with tree-based classification models
+* Improving model performance through optimization
+* Deploying the machine learning models
+* Connecting the prediction models to the Streamlit dashboard
+* Adding interactive price prediction and price-category prediction
 
 ---
 
 ## 👨‍💻 Author
 
 **Mohammed Dahi**
+*Data Analysis & Data Science Project*
 
-Data Analysis & Data Science Project
+```
+
+```
